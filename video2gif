@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mkdir -p /dev/shm/video2gif
+ffmpeg -y -i "$1" -f image2 -vcodec mjpeg -qscale 1 /dev/shm/video2gif/img_%03d.jpg
+pushd ./
+cd /dev/shm/video2gif
+for i in img*jpg; do convert $i `echo $i | sed 's/jpg/gif/g'` ; done
+convert img_???.gif anim.gif
+popd
+mv /dev/shm/video2gif/anim.gif "./$2"
+rm -rf /dev/shm/video2gif
+
